@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model MembershipIntent {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String
+  company     String?
+  message     String?
+  status      String   @default("PENDING") // PENDING | APPROVED | REJECTED
+  createdAt   DateTime @default(now())
+  processedAt DateTime?
+  processedBy String?
+  invite      Invite?
+}
+
+model Invite {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  intentId  Int      @unique
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  intent    MembershipIntent @relation(fields: [intentId], references: [id])
+}
+
+model Member {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  company   String?
+  createdAt DateTime @default(now())
+}
