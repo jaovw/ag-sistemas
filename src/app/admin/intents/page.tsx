@@ -11,10 +11,16 @@ export const metadata: Metadata = {
 
 function IntentList({ adminSecret }: { adminSecret: string }) {
   const intents = intentService.listIntents();
-  return (<IntentListAsync promise={intents} adminSecret={adminSecret} />);
+  return <IntentListAsync promise={intents} adminSecret={adminSecret} />;
 }
 
-async function IntentListAsync({ promise, adminSecret }: { promise: Promise<any[]>; adminSecret: string; }) {
+async function IntentListAsync({
+  promise,
+  adminSecret,
+}: {
+  promise: Promise<any[]>;
+  adminSecret: string;
+}) {
   const list = await promise;
   if (!list || list.length === 0) {
     return <div className="muted">Nenhuma intenção pendente.</div>;
@@ -42,8 +48,7 @@ async function IntentListAsync({ promise, adminSecret }: { promise: Promise<any[
                 <form action={rejectIntentAction}>
                   <input type="hidden" name="id" value={String(it.id)} />
                   <input type="hidden" name="adminSecret" value={adminSecret} />
-                  <Button type="button" className="btn ghost" aria-label="Recusar" />
-                  <button style={{ display:'none' }} /> {/* fallback to keep semantics */}
+                  <Button type="submit" variant="ghost">Recusar</Button>
                 </form>
               </>
             ) : (
@@ -56,8 +61,13 @@ async function IntentListAsync({ promise, adminSecret }: { promise: Promise<any[
   );
 }
 
-export default function AdminPage({ searchParams }: { searchParams?: { adminSecret?: string }}) {
-  const adminSecret = searchParams?.adminSecret ?? '';
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ adminSecret?: string }>;
+}) {
+  const resolved = await searchParams;
+  const adminSecret = String(resolved?.adminSecret ?? '');
 
   if (adminSecret !== process.env.ADMIN_SECRET) {
     return (
