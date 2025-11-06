@@ -1,4 +1,3 @@
-// src/app/api/invites/register/route.ts
 import { NextResponse } from 'next/server';
 import { inviteService } from '@/server/services/inviteService';
 

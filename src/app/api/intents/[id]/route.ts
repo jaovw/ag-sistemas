@@ -1,4 +1,3 @@
-// src/app/api/intents/[id]/route.ts
 import { NextResponse } from 'next/server';
 import { intentService } from '@/server/services/intentService';
 
