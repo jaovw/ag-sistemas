@@ -4,7 +4,11 @@
 > **Infra:** Docker + Docker Compose  
 > **Foco:** Fluxo de **Gestão de Membros** — formulário público, aprovação administrativa e convite.
 
----
+> ⚠️ **Nota Importante:**  
+> O documento **ARQUITETURA.md** presente neste repositório foi um **esboço inicial de concepção** criado antes da implementação final do projeto.  
+> Ele reflete **ideias preliminares e abstratas**, e **não deve ser considerado como a referência atual** da arquitetura.  
+> A estrutura, tecnologias e práticas documentadas neste **README.md** representam a **versão final e consolidada** do sistema.
+
 
 ## 🚀 1. Instalação e configuração local (sem Docker)
 
