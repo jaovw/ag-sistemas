@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: ag_sistemas_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: networking_prod
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      # You may use target: runner to build only runtime stage
+      target: runner
+    container_name: ag_sistemas_app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/networking_prod"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+      ADMIN_SECRET: "minha_senha_de_admin_super_segura"
+      NEXTAUTH_SECRET: "change_this_secret"
+      PRISMA_MIGRATE: "0" # set to "1" in production to run migrate deploy
+    volumes:
+      - ./:/app:delegated
+    command: ["npm", "run", "start"]
+
+volumes:
+  pgdata:
